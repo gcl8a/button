@@ -16,6 +16,9 @@
 class Button
 {
 private:
+    enum BUTTON_STATE {BUTTON_STABLE, BUTTON_UNSTABLE};
+    BUTTON_STATE state = BUTTON_STABLE;
+    
     uint8_t buttonPin;
     uint8_t activeState = 0; //active LOW by default
     
@@ -23,30 +26,46 @@ private:
     uint8_t currButtonState = 1; //curr state, may fluctuate due to bouncing
     
     uint32_t lastBounceTime = 0;
-    uint32_t debouncePeriod; // in ms
+    uint32_t debouncePeriod = 10; // in ms
     
 public:
-    Button(uint8_t pin, bool usePullup = true, uint32_t db = 10) //default to 10 ms debounce
+    Button(uint8_t pin, uint32_t db = 10) //default to 10 ms debounce
     {
         buttonPin = pin;
-        if(usePullup) pinMode(pin, INPUT_PULLUP);
+        
+//        if(usePullup) pinMode(pin, INPUT_PULLUP);
+//        else pinMode(pin, INPUT);
+        
         debouncePeriod = db;
     }
+    
+    void Init(bool usePullup = true)
+    {
+        if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
+        else pinMode(buttonPin, INPUT);
+    }
 
-    bool CheckButton(void)
+    bool CheckButtonPress(void)
     {
         bool retVal = false;
         uint8_t buttonState = digitalRead(buttonPin);
         
-        if(currButtonState != buttonState) //debouncing
+        if(currButtonState != buttonState)  //there's been a transistion, so start/continue debouncing
         {
-            lastBounceTime = millis(); //if there's a change, restart the debouncing timer
-            currButtonState = buttonState;
+            state = BUTTON_UNSTABLE;
+         
+            lastBounceTime = millis();      //start/restart the debouncing timer
+            currButtonState = buttonState;  //
         }
         
-        if(lastButtonState != currButtonState)
+        if(millis() - lastBounceTime >= debouncePeriod)
         {
-            if(millis() - lastBounceTime >= debouncePeriod)
+            if(state == BUTTON_UNSTABLE) state = BUTTON_STABLE;
+        }
+        
+        if(state == BUTTON_STABLE)
+        {
+            if(lastButtonState != currButtonState)
             {
                 if(buttonState == activeState) retVal = true;
                 lastButtonState = currButtonState;
