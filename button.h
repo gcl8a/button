@@ -66,7 +66,7 @@ public:
         
         if(state == BUTTON_STABLE)
         {
-            if(stabButtonState != tempButtonState)
+            if(stabButtonState != tempButtonState) //we have a transision
             {
                 if(tempButtonState == activeState) retVal = true;
                 stabButtonState = tempButtonState;
@@ -75,38 +75,6 @@ public:
         
         return retVal;
     }
-    
-    //older, cheap debouncing
-    
-//    bool CheckButtonPressed(void)
-//    {
-//        bool retVal = 0;
-//        uint8_t buttonState = digitalRead(buttonPin);
-//
-//        if(lastButtonState != buttonState)
-//        {
-//            delay(debounceTime); //cheap debouncing
-//            if(buttonState == 0) retVal = true;
-//        }
-//
-//        lastButtonState = buttonState;
-//        return retVal;
-//    }
-//
-//    bool CheckButtonReleased(void)
-//    {
-//        bool retVal = 0;
-//        int buttonState = digitalRead(buttonPin);
-//
-//        if(lastButtonState != buttonState)
-//        {
-//            delay(debounceTime); //cheap debouncing
-//            if(buttonState == 1) retVal = true;
-//        }
-//
-//        lastButtonState = buttonState;
-//        return retVal;
-//    }
 };
 
 #endif /* button_h */
