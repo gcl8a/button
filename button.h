@@ -22,8 +22,8 @@ private:
     uint8_t buttonPin = -1;
     uint8_t activeState = LOW; //active LOW by default
     
-    uint8_t currButtonState = HIGH; //last physical ("true") state
-    uint8_t tempButtonState = HIGH; //curr state, may fluctuate due to bouncing
+    uint8_t stabButtonState = HIGH; //most recent stable state
+    uint8_t tempButtonState = HIGH; //temporary state, may fluctuate due to bouncing
     
     uint32_t lastBounceTime = 0;
     uint32_t debouncePeriod = 10; // in ms
@@ -40,20 +40,20 @@ public:
         if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
         else pinMode(buttonPin, INPUT);
         
-        currButtonState = tempButtonState = digitalRead(buttonPin);
+        stabButtonState = tempButtonState = digitalRead(buttonPin);
     }
 
     bool CheckButtonPress(void)
     {
         bool retVal = false;
-        uint8_t buttonState = digitalRead(buttonPin);
+        uint8_t currButtonState = digitalRead(buttonPin);
         
-        if(tempButtonState != buttonState)  //there's been a transistion, so start/continue debouncing
+        if(tempButtonState != currButtonState)  //there's been a transistion, so start/continue debouncing
         {
             state = BUTTON_UNSTABLE;
          
             lastBounceTime = millis();      //start/restart the debouncing timer
-            tempButtonState = buttonState;  //keep track of the bouncing
+            tempButtonState = currButtonState;  //keep track of the bouncing
         }
         
         if(state == BUTTON_UNSTABLE)
@@ -66,10 +66,10 @@ public:
         
         if(state == BUTTON_STABLE)
         {
-            if(currButtonState != tempButtonState)
+            if(stabButtonState != tempButtonState)
             {
                 if(tempButtonState == activeState) retVal = true;
-                currButtonState = tempButtonState;
+                stabButtonState = tempButtonState;
             }
         }
         
