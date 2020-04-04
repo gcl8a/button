@@ -22,8 +22,8 @@ private:
     uint8_t buttonPin = -1;
     uint8_t activeState = LOW; //active LOW by default
     
-    uint8_t stabButtonState = HIGH; //most recent stable state
-    uint8_t tempButtonState = HIGH; //temporary state, may fluctuate due to bouncing
+    uint8_t stabButtonPos = HIGH; //most recent stable position
+    uint8_t tempButtonPos = HIGH; //temporary position, may fluctuate due to bouncing
     
     uint32_t lastBounceTime = 0;
     uint32_t debouncePeriod = 10; // in ms
@@ -40,22 +40,32 @@ public:
         if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
         else pinMode(buttonPin, INPUT);
         
-        stabButtonState = tempButtonState = digitalRead(buttonPin);
+        stabButtonPos = tempButtonPos = digitalRead(buttonPin);
     }
 
     bool CheckButtonPress(void)
     {
         bool retVal = false;
-        uint8_t currButtonState = digitalRead(buttonPin);
+        uint8_t currButtonPos = digitalRead(buttonPin);
         
-        if(tempButtonState != currButtonState)  //there's been a transistion, so start/continue debouncing
+        if(tempButtonPos != currButtonPos)  //there's been a transistion, so start/continue debouncing
         {
             state = BUTTON_UNSTABLE;
          
             lastBounceTime = millis();      //start/restart the debouncing timer
-            tempButtonState = currButtonState;  //keep track of the bouncing
+            tempButtonPos = currButtonPos;  //keep track of the bouncing
         }
-        
+
+//        if(millis() - lastBounceTime >= debouncePeriod) //timer has expired
+//        {
+//            state = BUTTON_STABLE;
+//            if(stabButtonPos != tempButtonPos) //we have a legit transision
+//            {
+//                if(tempButtonPos == activeState) retVal = true;
+//                stabButtonPos = tempButtonPos;
+//            }
+//        }
+
         if(state == BUTTON_UNSTABLE)
         {
             if(millis() - lastBounceTime >= debouncePeriod) //timer has expired
@@ -63,13 +73,13 @@ public:
                 state = BUTTON_STABLE;
             }
         }
-        
+
         if(state == BUTTON_STABLE)
         {
-            if(stabButtonState != tempButtonState) //we have a transision
+            if(stabButtonPos != tempButtonPos) //we have a transision
             {
-                if(tempButtonState == activeState) retVal = true;
-                stabButtonState = tempButtonState;
+                if(tempButtonPos == activeState) retVal = true;
+                stabButtonPos = tempButtonPos;
             }
         }
         
