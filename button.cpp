@@ -1,6 +1,6 @@
 #include <button.h>
 
-Button::Button(uint8_t pin, uint32_t db) //default to 10 ms debounce
+Button::Button(uint8_t pin, uint32_t db) 
 {
     buttonPin = pin;
     debouncePeriod = db;
