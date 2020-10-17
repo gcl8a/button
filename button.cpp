@@ -46,5 +46,3 @@ bool Button::CheckButtonPress(void)
     
     return retVal;
 }
-
-#endif /* button_h */
