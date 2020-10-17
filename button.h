@@ -29,62 +29,9 @@ private:
     uint32_t debouncePeriod = 10; // in ms
     
 public:
-    Button(uint8_t pin, uint32_t db = 10) //default to 10 ms debounce
-    {
-        buttonPin = pin;
-        debouncePeriod = db;
-    }
-    
-    void Init(bool usePullup = true)
-    {
-        if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
-        else pinMode(buttonPin, INPUT);
-        
-        stabButtonPos = tempButtonPos = digitalRead(buttonPin);
-    }
-
-    bool CheckButtonPress(void)
-    {
-        bool retVal = false;
-        uint8_t currButtonPos = digitalRead(buttonPin);
-        
-        if(tempButtonPos != currButtonPos)  //there's been a transistion, so start/continue debouncing
-        {
-            state = BUTTON_UNSTABLE;
-         
-            lastBounceTime = millis();      //start/restart the debouncing timer
-            tempButtonPos = currButtonPos;  //keep track of the bouncing
-        }
-
-//        if(millis() - lastBounceTime >= debouncePeriod) //timer has expired
-//        {
-//            state = BUTTON_STABLE;
-//            if(stabButtonPos != tempButtonPos) //we have a legit transision
-//            {
-//                if(tempButtonPos == activeState) retVal = true;
-//                stabButtonPos = tempButtonPos;
-//            }
-//        }
-
-        if(state == BUTTON_UNSTABLE)
-        {
-            if(millis() - lastBounceTime >= debouncePeriod) //timer has expired
-            {
-                state = BUTTON_STABLE;
-            }
-        }
-
-        if(state == BUTTON_STABLE)
-        {
-            if(stabButtonPos != tempButtonPos) //we have a transision
-            {
-                if(tempButtonPos == activeState) retVal = true;
-                stabButtonPos = tempButtonPos;
-            }
-        }
-        
-        return retVal;
-    }
+    Button(uint8_t pin, uint32_t db = 10);
+    void Init(bool usePullup = true);
+    bool CheckButtonPress(void);
 };
 
 #endif /* button_h */
