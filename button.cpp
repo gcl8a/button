@@ -1,12 +1,12 @@
 #include <button.h>
 
-Button::Button(uint8_t pin, uint32_t db = 10) //default to 10 ms debounce
+Button::Button(uint8_t pin, uint32_t db) //default to 10 ms debounce
 {
     buttonPin = pin;
     debouncePeriod = db;
 }
 
-void Button::Init(bool usePullup = true)
+void Button::Init(bool usePullup)
 {
     if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
     else pinMode(buttonPin, INPUT);
