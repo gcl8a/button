@@ -33,7 +33,9 @@ private:
 public:
     Button(uint8_t pin, uint32_t db = 10);
     void Init(bool usePullup = true);
+    void init(bool usePullup = true) {Init(usePullup);}
     bool CheckButtonPress(void);
+    bool checkButtonPress(void) {return CheckButtonPress();}
 };
 
 #endif /* button_h */
