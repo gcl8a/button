@@ -1,14 +1,6 @@
-//
-//  button.h
-//  
-//
-//  Created by Gregory C Lewin on 2/20/17.
-//
-//
-
-/*
+/**
  * A simple button class with polling. Uses 'proper' debouncing with non-blocking timer
- */
+ * */
 
 #ifndef BUTTON_H
 #define BUTTON_H
