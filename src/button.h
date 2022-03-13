@@ -2,8 +2,7 @@
  * A simple button class with polling. Uses 'proper' debouncing with non-blocking timer
  * */
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -29,5 +28,3 @@ public:
     bool checkButtonPress(void);
     bool CheckButtonPress(void) {return checkButtonPress();}
 };
-
-#endif /* button_h */
