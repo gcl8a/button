@@ -23,11 +23,11 @@ private:
     uint32_t debouncePeriod = 10; // in ms
     
 public:
-    Button(uint8_t pin, uint32_t db = 10);
-    void Init(bool usePullup = true);
-    void init(bool usePullup = true) {Init(usePullup);}
-    bool CheckButtonPress(void);
-    bool checkButtonPress(void) {return CheckButtonPress();}
+    Button(uint8_t pin, uint32_t db = 10, uint8_t active = LOW);
+    void init(bool usePullup = true);
+    void Init(bool usePullup = true) {init(usePullup);}
+    bool checkButtonPress(void);
+    bool CheckButtonPress(void) {return checkButtonPress();}
 };
 
 #endif /* button_h */
