@@ -12,7 +12,7 @@ private:
     enum BUTTON_STATE {BUTTON_STABLE, BUTTON_UNSTABLE};
     BUTTON_STATE state = BUTTON_STABLE;
     
-    uint8_t buttonPin = -1;
+    int8_t buttonPin = -1;
     uint8_t activeState = LOW; //active LOW by default
     
     uint8_t stabButtonPos = HIGH; //most recent stable position
@@ -22,7 +22,7 @@ private:
     uint32_t debouncePeriod = 10; // in ms
     
 public:
-    Button(uint8_t pin, uint32_t db = 10, uint8_t active = LOW);
+    Button(int8_t pin, uint32_t db = 10, uint8_t active = LOW);
     void init(bool usePullup = true);
     void Init(bool usePullup = true) {init(usePullup);}
     bool checkButtonPress(void);

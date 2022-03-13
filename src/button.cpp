@@ -1,12 +1,22 @@
 #include <button.h>
 
-Button::Button(uint8_t pin, uint32_t db, uint8_t active) 
+/**
+ * @param pin       The pin connected to the button.
+ * @param db        Debounce period, in ms. Defaults to 10 ms.
+ * @param active    Whether the button is active HIGH or LOW. Defaults to LOW.
+ * */
+Button::Button(int8_t pin, uint32_t db, uint8_t active) 
 {
     buttonPin = pin;
     debouncePeriod = db;
     activeState = active;
 }
 
+/**
+ * Initializes the pin.
+ * 
+ * @param usePullup     Whether or not to use internal pullups. Defaults to true.
+ * */
 void Button::init(bool usePullup)
 {
     if(usePullup) pinMode(buttonPin, INPUT_PULLUP);
@@ -15,8 +25,13 @@ void Button::init(bool usePullup)
     stabButtonPos = tempButtonPos = digitalRead(buttonPin);
 }
 
+/**
+ * Checks for the event of a button press.
+ * */
 bool Button::checkButtonPress(void)
 {
+    if(buttonPin == -1) Serial.println(F("Pin = -1!"));
+
     bool retVal = false;
     uint8_t currButtonPos = digitalRead(buttonPin);
     
