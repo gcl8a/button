@@ -35,6 +35,7 @@ bool Button::checkButtonPress(void)
     bool retVal = false;
     uint8_t currButtonPos = digitalRead(buttonPin);
     
+    //either state
     if(tempButtonPos != currButtonPos)  //there's been a transistion, so start/continue debouncing
     {
         state = BUTTON_UNSTABLE;
