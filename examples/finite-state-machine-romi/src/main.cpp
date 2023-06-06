@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <Romi32U4Buttons.h>
+#include <button.h>
 
 /**
  * This example shows how to respond to button events using Romi with the 32U4 control board.
@@ -12,8 +12,8 @@
 // declare the pin for the LED
 const int LED_PIN = 13;
 
-// Create a button object for the built-in button on the ESP32
-Romi32U4ButtonA buttonA;
+// Create a button object (Button A on a Romi, but use whatever pin you want)
+Button buttonA(14);
 
 // Define two basic states. For this program, they will correspond to an LED state (on or off).
 // "enum" stands for "enumerate". Basically, we define a new variable type called ROBOT_STATE.
@@ -34,7 +34,7 @@ void handleButtonPress(void)
       Serial.print("Button press -> ACTIVE: ");
       Serial.println(++count);
 
-      // TODO: Turn the LED on
+      // Turn the LED on
       digitalWrite(LED_PIN, HIGH);
 
       // Finally, update the state
@@ -47,7 +47,7 @@ void handleButtonPress(void)
       // Notify us that we're switching to IDLE
       Serial.println("Button press -> IDLE");
 
-      // TODO: Turn the LED off
+      // Turn the LED off
       digitalWrite(LED_PIN, LOW);
 
       // Finally, update the state
@@ -65,17 +65,17 @@ void setup()
   // Be sure to set your Serial Monitor appropriately in platformio.ini
   Serial.begin(115200);
 
-  // TODO: Set the LED pin to be an OUTPUT
+  // Set the LED pin to be an OUTPUT
   pinMode(LED_PIN, OUTPUT);
   
   // Initialize the button object
-  //buttonA.init();
+  buttonA.init();
 }
 
 /* Here is where all the fun happens. For each state, check for and respond to a button press.
  */ 
 void loop()
 {
-  if(buttonA.getSingleDebouncedPress()) handleButtonPress();
+  if(buttonA.checkButtonPress()) handleButtonPress();
 }
 
